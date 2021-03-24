@@ -1,5 +1,5 @@
-import com.org.Application;
-import com.org.model.BeverageMachine;
+import com.coffee.machine.Application;
+import com.coffee.machine.model.BeverageMachine;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
-com/org/config/MachineConfigData.class
-com/org/Application.class
-com/org/model/BeverageMachine.class
-com/org/executor/task/MakeBeverageTask.class
-com/org/model/Outlet.class
-com/org/config/MachineConfig.class
-com/org/model/Beverage.class
+com/coffee/machine/Application.class
+com/coffee/machine/config/MachineConfig.class
+com/coffee/machine/config/MachineConfigData.class
+com/coffee/machine/model/Outlet.class
+com/coffee/machine/model/BeverageMachine.class
+com/coffee/machine/executor/task/MakeBeverageTask.class
+com/coffee/machine/model/Beverage.class
