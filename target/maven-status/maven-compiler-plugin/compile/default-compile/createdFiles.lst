@@ -1,0 +1,7 @@
+com/org/config/MachineConfigData.class
+com/org/Application.class
+com/org/model/BeverageMachine.class
+com/org/executor/task/MakeBeverageTask.class
+com/org/model/Outlet.class
+com/org/config/MachineConfig.class
+com/org/model/Beverage.class
