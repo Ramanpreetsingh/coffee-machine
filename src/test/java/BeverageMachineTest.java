@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BeverageMachineTest {
@@ -39,7 +40,6 @@ public class BeverageMachineTest {
 
     @Test
     public void shouldCreateAllBeverages() throws IOException {
-
         String jsonInput = getJsonStringFromFile("test_input1.json");
 
         beverageMachine = BeverageMachine.getInstance(jsonInput);
@@ -58,7 +58,7 @@ public class BeverageMachineTest {
         assertTrue(beveragesProduced.containsKey("green_tea"));
         assertTrue(beveragesProduced.containsKey("black_tea"));
         assertEquals(beveragesProduced.get("hot_coffee"), Integer.valueOf(1));
-        assertEquals(beveragesProduced.get("hot_coffee"), Integer.valueOf(1));
+        assertEquals(beveragesProduced.get("hot_tea"), Integer.valueOf(1));
         assertEquals(beveragesProduced.get("green_tea"), Integer.valueOf(1));
         assertEquals(beveragesProduced.get("black_tea"), Integer.valueOf(1));
 
@@ -66,7 +66,6 @@ public class BeverageMachineTest {
 
     @Test
     public void shouldCreateAllBeveragesAfterRefill() throws IOException {
-
         String jsonInput = getJsonStringFromFile("test_input2.json");
 
         beverageMachine = BeverageMachine.getInstance(jsonInput);
@@ -114,7 +113,6 @@ public class BeverageMachineTest {
 
     @Test
     public void shouldNotCreateBeveragesIfConfigNotAvailable() throws IOException {
-
         String jsonInput = getJsonStringFromFile("test_input3.json");
 
         beverageMachine = BeverageMachine.getInstance(jsonInput);
@@ -128,4 +126,30 @@ public class BeverageMachineTest {
                 .until(() -> beveragesProduced.size() == 0);
 
     }
+
+    @Test
+    public void shouldCreateMultipleBeveragesOfSameType() throws IOException {
+        String jsonInput = getJsonStringFromFile("test_input4.json");
+
+        beverageMachine = BeverageMachine.getInstance(jsonInput);
+        beverageMachine.makeBeverageParallel(Arrays.asList("hot_tea", "hot_tea", "hot_coffee", "hot_coffee",
+                "green_tea", "black_tea"));
+
+        Map<String, Integer> beveragesProduced = beverageMachine.getBeveragesProduced();
+
+        await()
+                .atMost(5, TimeUnit.SECONDS)
+                .pollInterval(500, TimeUnit.MILLISECONDS)
+                .until(() -> beveragesProduced.size() == 4);
+
+        assertTrue(beveragesProduced.containsKey("hot_tea"));
+        assertTrue(beveragesProduced.containsKey("hot_coffee"));
+        assertTrue(beveragesProduced.containsKey("green_tea"));
+        assertTrue(beveragesProduced.containsKey("black_tea"));
+        assertEquals(beveragesProduced.get("hot_coffee"), Integer.valueOf(2));
+        assertEquals(beveragesProduced.get("hot_tea"), Integer.valueOf(2));
+        assertEquals(beveragesProduced.get("green_tea"), Integer.valueOf(1));
+        assertEquals(beveragesProduced.get("black_tea"), Integer.valueOf(1));
+    }
+
 }
