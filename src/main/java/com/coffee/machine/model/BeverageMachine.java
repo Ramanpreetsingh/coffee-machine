@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 /**
  * This class represents a Beverage Machine with n outlets. The machine processes make beverage requests in
- * multi threaded manner with n threads at a time.
+ * multi threaded manner with n threads at a time. Thread safety is given a priority over performance.
  */
 
 @Getter
@@ -116,7 +116,6 @@ public class BeverageMachine {
         }
 
         beveragesProduced.put(beverageName, beveragesProduced.getOrDefault(beverageName, 0 ) + 1);
-
         System.out.println(beverageName + " is prepared");
     }
 
@@ -132,6 +131,21 @@ public class BeverageMachine {
 
     public void shutdownMachine(){
         executor.shutdown();
+    }
+
+    /**
+     * Returns contents with volume less than a given thresholdValue in the beverage machine.
+     * @param thresholdValue
+     */
+    public synchronized Map<String, Integer> getLowContents(int thresholdValue){
+        Map<String, Integer> lowContentIndicator = new HashMap();
+        for(Map.Entry<String, Integer> entry: machineContents.entrySet()) {
+            if(entry.getValue() < thresholdValue){
+                System.out.println(entry.getKey() + "is running low with quantity" + entry.getValue());
+                lowContentIndicator.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return lowContentIndicator;
     }
 
 }
